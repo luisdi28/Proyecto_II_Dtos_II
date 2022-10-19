@@ -6,6 +6,7 @@ GameOverState::GameOverState(){
     currentStateEnum = GAME_OVER_STATE;
     nextStateEnum = GAME_OVER_STATE;
     userQuit = false;
+
 }
 
 GameOverState::~GameOverState(){
