@@ -6,10 +6,12 @@ Texture::Texture(){
     height = 0;
 }
 
+//Constructor de la clase
 Texture::~Texture(){
     free();
 }
 
+//Método que carga los datos del archivo
 bool Texture::loadFromFile(std::string path){
 
     // Frees current texture //
@@ -38,6 +40,7 @@ bool Texture::loadFromFile(std::string path){
         return currentTexture != NULL;
 }
 
+//Método que renderiza los elementos
 void Texture::render(int x, int y, SDL_Rect *clip){
 
     // Sets place to render on screen //
@@ -53,7 +56,7 @@ void Texture::render(int x, int y, SDL_Rect *clip){
     SDL_RenderCopy(gRenderer, currentTexture, clip, &renderSpace);
 }
 
-
+//Método que --
 void Texture::free(){
     if(currentTexture!=NULL){
         SDL_DestroyTexture(currentTexture);
@@ -63,10 +66,12 @@ void Texture::free(){
     }
 }
 
+//Método que obtiene el ancho
 int Texture::getWidth(){
     return width;
 }
 
+//Método que obtiene la altura
 int Texture::getHeight(){
     return height;
 }

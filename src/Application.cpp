@@ -14,6 +14,7 @@ int GAMEMODE = 0;
 vector<SDL_Rect> spriteClips;
 Texture spriteSheetTexture;
 
+//Constructor de la clase
 Application::Application(){
     gWindow=NULL;
     gRenderer=NULL;
@@ -35,6 +36,7 @@ Application::~Application(){
     gRenderer=NULL;
 }
 
+//-- que ejecuta el proceso en ejecución tras la carga del núcleo y el que a su vez genera todos los demás procesos
 bool Application::init(){
     bool initSuccessful = true;
 
@@ -82,6 +84,7 @@ bool Application::init(){
     return initSuccessful;
 }
 
+//-- que inicia la aplicación
 int Application::startApplication(){
 
     while (!applicationStateManager->stateExit()) {
@@ -106,6 +109,7 @@ int Application::startApplication(){
 
 }
 
+//-- que cierra la aplicación
 void Application::closeApplication(){
     IMG_Quit();
     SDL_Quit();

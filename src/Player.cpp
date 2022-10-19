@@ -3,6 +3,7 @@
 #include "../include/Button.h"
 #include "../include/GameState.h"
 
+//Método que permite al usuario jugar
 Player::Player(bool topSideOfBoard, CheckersBoard *board, Button buttons[]){
     Board = board;
     boardButtons = buttons;
@@ -19,6 +20,7 @@ Player::Player(bool topSideOfBoard, CheckersBoard *board, Button buttons[]){
     }
 }
 
+//Constructor de la clase
 Player::~Player(){
     team.clear();
     //delete Board;
@@ -27,6 +29,7 @@ Player::~Player(){
     boardButtons = NULL;
 }
 
+//-- que ejecuta el proceso en ejecución tras la carga del núcleo y el que a su vez genera todos los demás procesos
 void Player::initTeam() {
     if (topSide) {
         //----------------------------BLACK TEAM----------------------------\\
@@ -193,10 +196,12 @@ void Player::initTeam() {
     }
 }
 
+//Método que permite al jugador escoger el movimiento que tendrán las fichas
 bool Player::makeMove(SDL_Event *){
     return false;
 }
 
+//Método que identifica que las fichas son del mismo equipo
 bool Player::sameTeam(int value1, int value2){
     // checks if two peices are on the same team
     if (value1%2 == value2%2 && value1 != EMPTY_PIECE) {
@@ -205,6 +210,7 @@ bool Player::sameTeam(int value1, int value2){
     return false;
 }
 
+//Método que permite al jugador mover las fichas
 void Player::movePiece(vector<vector<int>> &pBoard, vector<Piece>& teamMove, int teamIndex, int newX, int newY){
     // Moves piece by its selected teamIndex to its (newX, newY) location
     if (abs(newX - teamMove[teamIndex].x) == 2 && abs(newY - teamMove[teamIndex].y) == 2) {
@@ -222,11 +228,13 @@ void Player::movePiece(vector<vector<int>> &pBoard, vector<Piece>& teamMove, int
     //cout<<pBoard<<endl;
 }
 
+//Método que permite al jugador comer fichas del oponente
 void Player::killPiece(vector<vector<int>> &pBoard, int x, int y) {
     pBoard[x][y] = EMPTY_PIECE;
     killWasMade = true;
 }
 
+//Método que actualiza al equipo del usuario
 void Player::updateTeam() {
     // Updates team when team.size() has been altered
     bool updateMade = false;
@@ -243,6 +251,7 @@ void Player::updateTeam() {
     }
 }
 
+//Método que actualiza las Reinas del equipo del usuario
 void Player::updateKings() {
 
     int yToMakeKing = 7 * topSide;
@@ -259,6 +268,7 @@ void Player::updateKings() {
     }
 }
 
+//Método que obtiene el índice de la posicion en "x" y "y " de la pieza en el tablero
 int Player::pieceTeamIndexByXY(int x, int y) {
     // Gets a piece's index from its x-y location on the board
     int index=0;

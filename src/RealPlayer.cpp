@@ -1,10 +1,12 @@
 #include "../include/RealPlayer.h"
 #include "../include/GameState.h"
 
+//Método que identifica que el que está jugando es el usuario
 RealPlayer::RealPlayer(bool topSideOfBoard, CheckersBoard *board, Button *buttons): Player(topSideOfBoard, board, buttons){
     selectingState = false;
 }
 
+//Constructor de la clase
 RealPlayer::~RealPlayer(){
     delete Board;
     Board = NULL;
@@ -12,6 +14,7 @@ RealPlayer::~RealPlayer(){
     boardButtons = NULL;
 }
 
+//Método que permite al jugador escoger el movimiento que tendrán las fichas
 bool RealPlayer::makeMove(SDL_Event* event){
 
     if (event->type == SDL_MOUSEBUTTONDOWN) {
@@ -59,6 +62,7 @@ bool RealPlayer::makeMove(SDL_Event* event){
     return false;
 }
 
+//Método que permite al jugador escoger la ficha que moverá
 void RealPlayer::selectPiece(int x, int y){
     // SELECT PIECE //
     // When a piece hasn't been selected yet, and the button currently selected doesn't have a piece inside //
@@ -74,6 +78,7 @@ void RealPlayer::selectPiece(int x, int y){
     }
 }
 
+//Método que valida si la casilla sellecionada por el usuario es valida
 bool RealPlayer::selectedLocationIsValid(int currentIndex, int x, int y, bool forHighlight) {
     bool locationIsValid = false;
     if (Board->virtualBoard[x][y] == EMPTY_PIECE) {
@@ -121,6 +126,7 @@ bool RealPlayer::selectedLocationIsValid(int currentIndex, int x, int y, bool fo
     return locationIsValid;
 }
 
+//Método que imprime un registro de los movimiento validos realizados en la partida
 void RealPlayer::highlightValidMoves() {
     int x, y;
     for (int i = -2; i <=2; i++){

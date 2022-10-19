@@ -1,16 +1,6 @@
 #ifndef GameState_h
 #define GameState_h
 
-#ifdef _WIN32
-#include <SDL.h>
-#include <SDL_image.h>
-#endif
-
-#ifdef __APPLE__
-#include <SDL2/SDL.h>
-#include <SDL2_image/SDL_image.h>
-#endif
-
 #ifdef __linux
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

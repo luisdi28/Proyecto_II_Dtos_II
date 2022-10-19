@@ -2,6 +2,7 @@
 #include "../include/GameState.h"
 #include "../include/Texture.h"
 
+//Método que ubica las fichas en el tablero
 CheckersBoard::CheckersBoard(){
     for (int y = 0; y < 8; y++)
     {
@@ -17,6 +18,7 @@ CheckersBoard::CheckersBoard(){
     highLightSelected.y = NULL;
 }
 
+//Constructor de la clase
 CheckersBoard::~CheckersBoard(){
     virtualBoard.clear();
 }
@@ -37,17 +39,20 @@ ostream & operator << (ostream & output, CheckersBoard & boardPassed) {
     return output;
 }
 
+//Método que posiciona las fichas en el tablero
 void CheckersBoard::turnHighLightOn(int x,int y){
     highLight = true;
     highLightSelected.x = x * 80;
     highLightSelected.y = y * 80;
 }
 
+//Método que verifica si la posición está disponible para ubicar una ficha
 void CheckersBoard::turnHighLightOff(){
     highLight = false;
     validLocations.clear();
 }
 
+//Método que dibuja el tablero
 void CheckersBoard::drawBoard(){
     
     bool indent = false;
@@ -73,6 +78,7 @@ void CheckersBoard::drawBoard(){
     
 }
 
+//Método que dibuja las líneas en el tablero
 void CheckersBoard::drawHighlights() {
     if (highLight) {
         // Set to white //
@@ -93,6 +99,7 @@ void CheckersBoard::drawHighlights() {
     }
 }
 
+//Método que dibuja las piecas del tablero
 void CheckersBoard::drawBoardPeices(int x, int y, Button *boardButton){
     switch (virtualBoard[x][y]) {
             

@@ -2,6 +2,7 @@
 #include "../include/Texture.h"
 #include "../include/Button.h"
 
+//Método que establece el estado del menu del juego
 MenuState::MenuState(){
     BUTTON_WIDTH = 346;
     BUTTON_HEIGHT = 40;
@@ -12,6 +13,7 @@ MenuState::MenuState(){
     
 }
 
+//Constructor de la clase
 MenuState::~MenuState(){
     delete [] boardButtons;
     boardButtons = NULL;
@@ -19,12 +21,14 @@ MenuState::~MenuState(){
     spriteClips.clear();
 }
 
+//Método que establece el estado del menu del juego
 void MenuState::stateEnter(){
     if (!loadMedia()) {
         cout<<"Could not load media"<<endl;
     }
 }
 
+//Método que establece el estado de los eventos del juego
 void MenuState::stateEvent(){
     SDL_Event event;
     
@@ -61,6 +65,7 @@ void MenuState::stateEvent(){
     }
 }
 
+//Método que actializa el estado del juego
 StateEnum MenuState::stateUpdate(){
     if (currentStateEnum != nextStateEnum) {
         return nextStateEnum;
@@ -68,6 +73,7 @@ StateEnum MenuState::stateUpdate(){
     return currentStateEnum;
 }
 
+//Método que renderiza el juego
 void MenuState::stateRender(){
     SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
     SDL_RenderClear(gRenderer);
@@ -81,10 +87,12 @@ void MenuState::stateRender(){
     }
 }
 
+//Método que cierra el juego
 bool MenuState::stateExit(){
     return userQuit;
 }
 
+//Método que carga la media del juego
 bool MenuState::loadMedia(){
     bool initSuccessfulful = true;
     
@@ -120,6 +128,7 @@ bool MenuState::loadMedia(){
     return initSuccessfulful;
 }
 
+//Método que dibuja el menu del juego
 void MenuState::drawMenu() {
     spriteSheetTexture.render(0, 0, &spriteClips[FULL_MENU]);
 }
