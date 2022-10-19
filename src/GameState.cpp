@@ -9,7 +9,7 @@
 
 int TOTAL_BUTTONS = 32;
 
-
+//Método que establece el estado del juego
 GameState::GameState(){
     BUTTON_WIDTH = 80;
     BUTTON_HEIGHT = 80;
@@ -38,10 +38,10 @@ GameState::GameState(){
             userQuit = true;
             break;
     }
-    //Player2 = new oldAI(false, Board, boardButtons);
 
 }
 
+//Constructor de la clase
 GameState::~GameState(){
     delete Board;
     Board = NULL;
@@ -54,16 +54,18 @@ GameState::~GameState(){
     spriteClips.clear();
 }
 
+//Método que establece el estado de entrada del juego
 void GameState::stateEnter(){
     if (!loadMedia()) {
         cout<<"Could not load media"<<endl;
     }
 }
 
+//Método que establece el estado de los eventos del juego
 void GameState::stateEvent(){
     SDL_Event event;
 
-    // Event loop //
+    // Loop (Ciclo) del evento //
     while(SDL_PollEvent(&event)!=0){
 
         // Quits game //
@@ -73,7 +75,7 @@ void GameState::stateEvent(){
         }
 
         if (!gameOver()) {
-            // Player 1 turn //
+            // Turno del jugador 1 //
             if (Player1->turn) {
                 if(Player1->makeMove(&event)){
                     Player1->updateKings();
@@ -81,11 +83,11 @@ void GameState::stateEvent(){
                     Player2->turn = true;
                     Player2->updateTeam();
                     cout<<*Board<<endl;
-                    // Breaks to continue in main loop //
+                    // Breaks para continuar en el loop principal //
                     break;
                 }
             }
-            // Player 2 turn //
+            // Turno del jugador 2 //
             else{
                 if(Player2->makeMove(&event)){
                     Player2->updateKings();
@@ -93,7 +95,7 @@ void GameState::stateEvent(){
                     Player1->turn = true;
                     Player1->updateTeam();
                     cout<<*Board<<endl;
-                    // Breaks to continue in main loop //
+                    // Breaks para continuar en el loop principal //
                     break;
                 }
             }
@@ -104,6 +106,7 @@ void GameState::stateEvent(){
     }
 }
 
+//Método que carga la media del juego
 bool GameState::loadMedia(){
     bool initSuccessfulful = true;
 
@@ -111,17 +114,17 @@ bool GameState::loadMedia(){
         printf("Could not load sprite");
         initSuccessfulful = false;
     }
-    // Initalize Checkers Pieces //
-    // Red Piece //
+    // Inicializa las piezas del juego de Damas //
+    // Pieza Roja //
     SDL_Rect redPeice = {0,0,BUTTON_WIDTH,BUTTON_HEIGHT};
     spriteClips.push_back(redPeice);
-    // Black Piece //
+    // Pieza Negra //
     SDL_Rect blackPeice = {BUTTON_WIDTH,0,BUTTON_WIDTH,BUTTON_HEIGHT};
     spriteClips.push_back(blackPeice);
-    // Red king Piece //
+    // Pieza Dama Roja //
     SDL_Rect redKing = {BUTTON_WIDTH * 2, 0, BUTTON_WIDTH, BUTTON_HEIGHT};
     spriteClips.push_back(redKing);
-    // Black king Piece //
+    // Pieza Dama Negra //
     SDL_Rect blackKing = {BUTTON_WIDTH * 3, 0, BUTTON_WIDTH, BUTTON_HEIGHT};
     spriteClips.push_back(blackKing);
 
@@ -129,7 +132,7 @@ bool GameState::loadMedia(){
     bool indent = true;
     int xStart;
 
-    // Sets points for buttons (top left of button)
+    //Setea puntos para el botón (arriba a la izquierda del botón)
     for(int y=0;y<SCREEN_HEIGHT;y+=BUTTON_HEIGHT){
         if (indent) {
             xStart = BUTTON_WIDTH;
@@ -147,6 +150,8 @@ bool GameState::loadMedia(){
     return initSuccessfulful;
 }
 
+//**//
+//Método que establece el fin del juego
 bool GameState::gameOver(){
     if (Player1->team.size() == 0 || Player2->team.size() == 0) {
         return true;
@@ -154,6 +159,7 @@ bool GameState::gameOver(){
     return false;
 }
 
+//Método que actializa el estado del juego
 StateEnum GameState::stateUpdate(){
     if (currentStateEnum != nextStateEnum) {
         return nextStateEnum;
@@ -161,16 +167,17 @@ StateEnum GameState::stateUpdate(){
     return currentStateEnum;
 }
 
+//Método que renderiza el juego
 void GameState::stateRender(){
-    // Render stuff here //
-    // Light wood color //
+    //Renderiza informacón aquí  //
+    // Color madera claro//
     SDL_SetRenderDrawColor(gRenderer, 0xD4, 0x9A, 0x6A, 0xFF);
-    // Refreshs screen //
+    // Refresca la pantalla //
     SDL_RenderClear(gRenderer);
 
     Board->drawBoard();
 
-    // Render whole team //
+    // Renderiza el equipo completo //
     int index = 0;
     for (int y=0; y<8; y++) {
         for (int x=0; x<8; x++) {
@@ -182,6 +189,7 @@ void GameState::stateRender(){
     }
 }
 
+//Método que cierra el juego
 bool GameState::stateExit(){
     return userQuit;
 }

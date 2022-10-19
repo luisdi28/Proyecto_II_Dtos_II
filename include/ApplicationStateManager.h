@@ -2,7 +2,7 @@
 #define ApplicationStateManager_h
 
 #include "ApplicationState.h"
-//class ApplicationState;
+class ApplicationState;
 
 class ApplicationStateManager{
 public:

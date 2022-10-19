@@ -6,17 +6,19 @@ Texture::Texture(){
     height = 0;
 }
 
+//Constructor de la clase
 Texture::~Texture(){
     free();
 }
 
+//Método que carga los datos del archivo
 bool Texture::loadFromFile(std::string path){
 
-    // Frees current texture //
+    // Libera la textura actual //
     free();
 
     SDL_Texture *newTexture;
-    // Load image from path //
+    // Carga la imágen desde la ruta//
     SDL_Surface *loadedSurface = IMG_Load(path.c_str());
 
     if(loadedSurface == NULL){
@@ -28,7 +30,7 @@ bool Texture::loadFromFile(std::string path){
             printf("Unable to create texture from %s! SDL Error: %s\n",path.c_str(), SDL_GetError());
         }
         else{
-            // Gets image dimensions //
+            // Obtiene las dimensiones de la imágen //
             width = loadedSurface->w;
             height = loadedSurface->h;
         }
@@ -38,22 +40,23 @@ bool Texture::loadFromFile(std::string path){
         return currentTexture != NULL;
 }
 
+//Método que renderiza los elementos
 void Texture::render(int x, int y, SDL_Rect *clip){
 
-    // Sets place to render on screen //
+    // Setea un espacio para renderizar en la pantalla //
     SDL_Rect renderSpace = {x, y, width, height};
 
-    // Sets rendering space dimensions from clip dimensions //
+    // Setea un espacio para rendarizar las dimensiones de los clips dimensionales //
     if(clip != NULL){
         renderSpace.w = clip->w;
         renderSpace.h = clip->h;
     }
 
-    // Render to screen //
+    // Renderiza a la pantalla//
     SDL_RenderCopy(gRenderer, currentTexture, clip, &renderSpace);
 }
 
-
+//Método que libera las texturas
 void Texture::free(){
     if(currentTexture!=NULL){
         SDL_DestroyTexture(currentTexture);
@@ -63,10 +66,12 @@ void Texture::free(){
     }
 }
 
+//Método que obtiene el ancho
 int Texture::getWidth(){
     return width;
 }
 
+//Método que obtiene la altura
 int Texture::getHeight(){
     return height;
 }
