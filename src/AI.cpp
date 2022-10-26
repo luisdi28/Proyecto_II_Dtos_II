@@ -2,7 +2,6 @@
 #include "../include/AI.h"
 #include "../include/GameState.h"
 
-//Seteo del rango de movimiento de las piezas
 extern Directions kingMoves[4];
 extern Directions pieceMoves[2];
 
@@ -11,7 +10,6 @@ AI::AI(bool topSideOfBoard, CheckersBoard *board, Button *buttons): Player(topSi
     currentIndex = 0;
 }
 
-//Constructor de la clase
 AI::~AI(){
     delete Board;
     Board = NULL;
@@ -19,9 +17,8 @@ AI::~AI(){
     boardButtons = NULL;
 }
 
-//Método que actualiza el equipo de la AI
 void AI::updateTeam(vector<vector<int>> &tempBoard, vector<Piece> &teamCopy, bool enemy) {
-    // Actualiza el equipo cuanso team.size() ha sido alterado
+    // Updates team when team.size() has been altered
     int teamNumber = TEAM_NUMBER;
 
     if (enemy) {
@@ -36,7 +33,6 @@ void AI::updateTeam(vector<vector<int>> &tempBoard, vector<Piece> &teamCopy, boo
     }
 }
 
-//Método que actualiza la cantidad de Reinas del equipo de la AI
 void AI::updateKings(vector<vector<int>> &tempBoard, vector<Piece> &teamCopy, bool enemy) {
 
     int yToMakeKing = 7 * topSide;
@@ -53,7 +49,6 @@ void AI::updateKings(vector<vector<int>> &tempBoard, vector<Piece> &teamCopy, bo
     }
 }
 
-//Método que obtiene elas fichas del equipo enemigo
 void AI::getEnemyTeam(){
     enemyTeam.clear();
     for(int x=0;x<8;x++){
@@ -70,7 +65,6 @@ void AI::getEnemyTeam(){
     }
 }
 
-//Método que obtiene el valor máximo
 int AI::findMax(int value1, int value2){
     if (value1 > value2) {
         return value1;
@@ -78,7 +72,6 @@ int AI::findMax(int value1, int value2){
     return value2;
 }
 
-//Método que obtiene el valor mínimo
 int AI::findMin(int value1, int value2){
     if (value1 < value2) {
         return value1;
@@ -86,7 +79,6 @@ int AI::findMin(int value1, int value2){
     return value2;
 }
 
-//Método que obtiene la mejor pieza del enemigo
 int AI::enemyBestPiece(vector<Piece> pieceVector){
 
     int smallest = pieceVector[0].potential;
@@ -113,7 +105,6 @@ int AI::enemyBestPiece(vector<Piece> pieceVector){
     return smallestVector[randIndex];
 }
 
-//Método que obtiene la mejor pieza de la AI
 int AI::bestPiece(vector<Piece> pieceVector){
 
     int largest = pieceVector[0].potential;
@@ -140,9 +131,9 @@ int AI::bestPiece(vector<Piece> pieceVector){
     return largestVector[randIndex];
 }
 
-//Método que realiza el movimiento de la ficha del AI
 bool AI::makeMove(SDL_Event *event){
 
+    // Init enemyTeam that this class can use
     getEnemyTeam();
 
     for(int index=0;index<team.size();index++){
@@ -169,13 +160,13 @@ bool AI::makeMove(SDL_Event *event){
     int x = team[bestPieceIndex].x;
     int y = team[bestPieceIndex].y;
 
-    //Se asegura que el movimiento no está fuera de los límites.//
+    // Makes sure the move isnt out of bounds //
     if (team[bestPieceIndex].potential != OUT_OF_BOUND) {
 
         changeWithDirection(x, y, team[bestPieceIndex].bestDirection, false);
 
         if(sameTeam(Board->virtualBoard[x][y],ENEMY_TEAM_NUMBER)){
-            //Lo cambia de nuevo por mover dos unidades diagonalmente//
+            // Changes it again for moving 2 units diagonally //
             changeWithDirection(x, y, team[bestPieceIndex].bestDirection, false);
         }
         cout<<") best move: (" << x << "," << y <<")"<< endl;
@@ -185,7 +176,6 @@ bool AI::makeMove(SDL_Event *event){
     return false;
 }
 
-//Método que calcula el valor
 int AI::valueCalculator(vector<Piece> teamCopy, vector<Piece> enemyTeamCopy){
 
     int value = 0;
@@ -246,7 +236,6 @@ int AI::valueCalculator(vector<Piece> teamCopy, vector<Piece> enemyTeamCopy){
     return value;
 }
 
-//Método que cambia la dirección las fichas
 bool AI::changeWithDirection(int &x, int &y, Directions direction, bool enemy){
     int one = ONE;
 
@@ -276,7 +265,7 @@ bool AI::changeWithDirection(int &x, int &y, Directions direction, bool enemy){
             break;
     }
 
-    //Se asegura que los nuevos valores se encuentren dentro del límite//
+    // Makes sure new values are in bound //
     if(x<0 || y<0 || y>7 || x>7){
         return false;
     }
@@ -284,20 +273,18 @@ bool AI::changeWithDirection(int &x, int &y, Directions direction, bool enemy){
     return true;
 }
 
-//Método que verifica que si se puede realizar la acción de comer
 bool AI::killCheckArea(vector<vector<int>> tempBoard, int x, int y, Directions checkDirection, bool enemy){
-    //Se asegura que la dirección está habilitada para el cambio//
+    // Makes sure direction was able to be changed//
     if(!changeWithDirection(x, y, checkDirection, enemy)){
         return false;
     }
-    //Retorna true si la dirección está libre (vacía)
+    // Returns true if direction is clear //
     if(tempBoard[x][y] == EMPTY_PIECE){
         return true;
     }
     return false;
 }
 
-//Método que chequea los nodos
 bool AI::checkNode(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector<Piece> enemyTeamCopy, Directions direction, bool enemy){
     int x, y;
     int teamNumber = TEAM_NUMBER;
@@ -314,17 +301,17 @@ bool AI::checkNode(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector
         y = teamCopy[currentIndex].y;
     }
 
-    //Se asegura que los valores cambiados en "x" y "y" son aplicados (Por si acaso)
+    // Makes sure the changed x & y values are applied (Just incase)
     if(!changeWithDirection(x , y, direction, enemy)){
         return false;
     }
 
-    //Ficha del mismo equipo en el camino
+    // Team piece in the way
     if(sameTeam(tempBoard[x][y], teamNumber)){
         return false;
     }
 
-    //Ficha enemiga que no puede ser comida
+    // Enemy might be unkillable
     if(sameTeam(tempBoard[x][y], enemyTeamNumber)){
         return killCheckArea(tempBoard, x, y, direction, enemy);
     }
@@ -332,7 +319,6 @@ bool AI::checkNode(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector
     return true;
 }
 
-//Método que obtiene el valor máximo
 int AI::maxValue(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector<Piece> enemyTeamCopy, int depth, Directions direction){
 
     bool killMove = false;
@@ -354,7 +340,7 @@ int AI::maxValue(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector<P
         }
     }
 
-    //Esto mueve en el Tablero temporal
+    //This should move on the tempBoard
     movePiece(tempBoard, teamCopy, currentIndex, x, y);
     updateKings(tempBoard, teamCopy, false);
     if (killMove) {
@@ -373,7 +359,6 @@ int AI::maxValue(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector<P
 
 }
 
-//Método que obtiene el movimiento mínimo
 int AI::minMove(vector<vector<int>> tempboard, vector<Piece> teamCopy, vector<Piece> enemyTeamCopy, int depth){
 
     for(int index=0;index<enemyTeamCopy.size();index++){
@@ -394,7 +379,6 @@ int AI::minMove(vector<vector<int>> tempboard, vector<Piece> teamCopy, vector<Pi
     return enemyTeamCopy[bestPieceIndex].potential;
 }
 
-//Método que obtiene el valor mínimo
 int AI::minValue(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector<Piece> enemyTeamCopy, int depth, Directions direction){
 
     bool killMove = false;
@@ -417,13 +401,13 @@ int AI::minValue(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector<P
         }
     }
 
-    //Esto mueve en el tablero temporal
+    //This should move on the tempBoard
     movePiece(tempBoard, enemyTeamCopy, enemyCurrentIndex, x, y);
     updateKings(tempBoard, enemyTeamCopy, true);
     if (killMove) {
         updateTeam(tempBoard, teamCopy, false);
         if (teamCopy.size()<=0) {
-            //número más pequeño
+            //smallest number
             return -1 * WIN_VALUE;
         }
     }
@@ -437,7 +421,6 @@ int AI::minValue(vector<vector<int>> tempBoard, vector<Piece> teamCopy, vector<P
 
 }
 
-//Método que obtiene el movimiento máximo
 int AI::maxMove(vector<vector<int>> tempboard, vector<Piece> teamCopy, vector<Piece> enemyTeamCopy, int depth){
 
     for(int index=0;index<teamCopy.size();index++){

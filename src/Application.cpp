@@ -2,7 +2,6 @@
 #include "../include/ApplicationState.h"
 #include "../include/ApplicationStateManager.h"
 #include "../include/Texture.h"
-
 int currentSprite = 0;
 SDL_Window *gWindow;
 SDL_Renderer *gRenderer;
@@ -15,7 +14,6 @@ int GAMEMODE = 0;
 vector<SDL_Rect> spriteClips;
 Texture spriteSheetTexture;
 
-//Constructor de la clase
 Application::Application(){
     gWindow=NULL;
     gRenderer=NULL;
@@ -37,7 +35,6 @@ Application::~Application(){
     gRenderer=NULL;
 }
 
-//Método que ejecuta el proceso en ejecución tras la carga del núcleo y el que a su vez genera todos los demás procesos
 bool Application::init(){
     bool initSuccessful = true;
 
@@ -85,7 +82,6 @@ bool Application::init(){
     return initSuccessful;
 }
 
-//Método que inicia la aplicación
 int Application::startApplication(){
 
     while (!applicationStateManager->stateExit()) {
@@ -110,7 +106,6 @@ int Application::startApplication(){
 
 }
 
-//Método que cierra la aplicación
 void Application::closeApplication(){
     IMG_Quit();
     SDL_Quit();
